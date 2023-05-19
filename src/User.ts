@@ -1,15 +1,19 @@
 export default class User{
-    #timeline: string[] = [];
+    #_timeline: string[] = [];
 
     get timeline(): string[] {
-        return this.#timeline;
+        return this.#_timeline;
     }
 
     set timeline(value: string[]) {
-        this.#timeline = value;
+        this.#_timeline = value;
     }
 
     publishMessage(message: string):void  {
         this.timeline.push(message);
+    }
+
+    getUserTimeline(user: User): string[] {
+        return user.timeline;
     }
 }
