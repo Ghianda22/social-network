@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "parcel": "latest",
+    "jest": "latest"
+  },
+  "scripts": {
+    "test": "jest"
+  }
+}
