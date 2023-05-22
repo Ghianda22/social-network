@@ -32,4 +32,13 @@ export default class User{
     subscribeToUserTimeline(user: User) {
         this.subscriptions.push(user);
     }
+
+    getSubscriptionsMessages() {
+        let allSubscriptionMessages: string[] = [];
+
+        this.subscriptions.forEach(user => {
+            allSubscriptionMessages.push(...this.getUserTimeline(user));
+        })
+        return allSubscriptionMessages;
+    }
 }

@@ -69,3 +69,27 @@ test('When getSubscriptionsList is called, should return the list of subscriptio
     expect(actualListOfSubscriptions).toStrictEqual(expectedListOfSubscriptions);
 })
 
+test('Given user with subscriptions, should return list of messages of all subscriptions', () => {
+    //given
+    const user0 = new User();
+    const user1 = new User();
+    const user2 = new User();
+    const message0: string = 'Hi, this is user 0';
+    const message1: string = 'Hi, this is user 1';
+    const message2: string = 'Nice to meet you user 0';
+
+    user0.publishMessage(message0);
+    user1.publishMessage(message1);
+    user1.publishMessage(message2);
+
+    user2.subscribeToUserTimeline(user0);
+    user2.subscribeToUserTimeline(user1);
+    const expectedListOfMessages: string[] = [message0, message1, message2];
+
+    //when
+    const actualListOfMessages: string[] = user2.getSubscriptionsMessages();
+
+    //then
+    expect(actualListOfMessages).toStrictEqual(expectedListOfMessages);
+})
+
