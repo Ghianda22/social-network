@@ -50,3 +50,17 @@ test('Given a message, if the word after the @ is not a valid username, it shoul
     //then
     expect(actualMentions).toStrictEqual(expectedMentions);
 })
+
+//Alice can link to a clickable web resource in a message
+test('When a message contains a valid web address, it should be recognized as a link', () => {
+    //given
+    const message: Message = new Message('Hi @Charlie, look at this cat! https://http.cat/418');
+    const expectedLinks: string[] = ['https://http.cat/418'];
+
+
+    //when
+    const actualLinks: string[] = message.link;
+
+    //then
+    expect(actualLinks).toStrictEqual(expectedLinks)
+})

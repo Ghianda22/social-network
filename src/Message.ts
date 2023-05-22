@@ -3,12 +3,15 @@ import User from "./User";
 export default class Message {
     #_mention: string[] = [];
     #_text: string = '';
+    #_link: string[];
 
 
     constructor(text: string) {
         this.#_text = text;
         this.#_mention = this.searchForMentions(text);
+        this.#_link = this.searchForLinks(text);
     }
+
 
     get mention(): string[] {
         return this.#_mention;
@@ -18,17 +21,13 @@ export default class Message {
         return this.#_text;
     }
 
-    set mention(value: string[]) {
-        this.#_mention = value;
-    }
-
-    set text(value: string) {
-        this.#_text = value;
+    get link(): string[] {
+        return this.#_link;
     }
 
 
     private searchForMentions(text: string): string[] {
-        const regExAtPresence = new RegExp('@[A-z]*', 'gm');
+        const regExAtPresence:RegExp = new RegExp('@[A-z]*', 'gm');
         const regExMatches: string[] = text.match(regExAtPresence);
         const mentionedUsernames: string[] = [];
         if (regExMatches == null) {
@@ -42,6 +41,15 @@ export default class Message {
         })
         return mentionedUsernames;
 
+    }
+
+    private searchForLinks(text: string): string[] {
+        const regExValidUrl:RegExp = new RegExp('(http|ftp|https):\\/\\/([\\w_-]+(?:(?:\\.[\\w_-]+)+))([\\w.,@?^=%&:\\/~+#-]*[\\w@?^=%&\\/~+#-])', 'gm');
+        const regExMatches: string[] = text.match(regExValidUrl);
+        if (regExMatches == null) {
+            return [];
+        }
+        return regExMatches;
     }
 
 }
