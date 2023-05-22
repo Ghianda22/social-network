@@ -1,12 +1,22 @@
-export default class User{
-    #_timeline: string[] = [];
-    #_subscriptions: User[] = [];
+import Message from "./Message";
 
-    get timeline(): string[] {
+export default class User{
+    #_timeline: Message[] = [];
+    #_subscriptions: User[] = [];
+    #_username: string;
+    static existingUsernames: string[] = [];
+
+
+    constructor(username: string) {
+        this.#_username = username;
+        User.existingUsernames.push(username);
+    }
+
+    get timeline(): Message[] {
         return this.#_timeline;
     }
 
-    set timeline(value: string[]) {
+    set timeline(value: Message[]) {
         this.#_timeline = value;
     }
     get subscriptions(): User[] {
@@ -17,11 +27,11 @@ export default class User{
         this.#_subscriptions = value;
     }
 
-    publishMessage(message: string):void  {
+    publishMessage(message: Message):void  {
         this.timeline.push(message);
     }
 
-    getUserTimeline(user: User): string[] {
+    getUserTimeline(user: User): Message[] {
         return user.timeline;
     }
 
@@ -34,7 +44,7 @@ export default class User{
     }
 
     getSubscriptionsMessages() {
-        let allSubscriptionMessages: string[] = [];
+        let allSubscriptionMessages: Message[] = [];
 
         this.subscriptions.forEach(user => {
             allSubscriptionMessages.push(...this.getUserTimeline(user));

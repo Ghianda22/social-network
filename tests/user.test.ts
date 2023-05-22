@@ -1,10 +1,11 @@
 import User from "../src/User";
+import Message from "../src/Message";
 
 // Alice can publish messages to a personal timeline
 test('When a message is published, should be added to timeline', () => {
     //given
-    const user: User = new User();
-    const message: string = "This is a test message";
+    const user: User = new User("Alice");
+    const message: Message = new Message("This is a test message");
 
     //when
     user.publishMessage(message)
@@ -15,11 +16,11 @@ test('When a message is published, should be added to timeline', () => {
 
 test('When messages are published, should mantain the pubblication order in timeline', () => {
     //given
-    const user: User = new User();
-    const message0: string = "This is the first message";
-    const message1: string = "This is the second message";
-    const message2: string = "This is the third message";
-    const expectedTimeline: string[] = [message0, message1, message2]
+    const user: User = new User("Alice");
+    const message0: Message = new Message("This is the first message");
+    const message1: Message = new Message("This is the second message");
+    const message2: Message = new Message("This is the third message");
+    const expectedTimeline: Message[] = [message0, message1, message2]
 
     //when
     user.publishMessage(message0);
@@ -33,12 +34,12 @@ test('When messages are published, should mantain the pubblication order in time
 // Bob can view Alice’s timeline
 test("When getUserTimeline(user) is called, should return user's timeline", () => {
     //given
-    const user0: User = new User();
-    const user1: User = new User();
+    const user0: User = new User("Alice");
+    const user1: User = new User("Bob");
 
-    const message0: string = "This is the first message";
-    const message1: string = "This is the second message";
-    const message2: string = "This is the third message";
+    const message0: Message = new Message("This is the first message");
+    const message1: Message = new Message("This is the second message");
+    const message2: Message = new Message("This is the third message");
     user0.publishMessage(message0);
     user0.publishMessage(message1);
     user0.publishMessage(message2);
@@ -55,9 +56,9 @@ test("When getUserTimeline(user) is called, should return user's timeline", () =
 //Charlie can subscribe to Alice’s and Bob’s timelines, and view an aggregated list of all subscriptions
 test('When getSubscriptionsList is called, should return the list of subscriptions', ()=>{
     //given
-    const user0 = new User();
-    const user1 = new User();
-    const user2 = new User();
+    const user0 = new User("Alice");
+    const user1 = new User("Bob");
+    const user2 = new User("Charlie");
     user2.subscribeToUserTimeline(user0);
     user2.subscribeToUserTimeline(user1);
     const expectedListOfSubscriptions: User[] = [user0, user1];
@@ -71,12 +72,12 @@ test('When getSubscriptionsList is called, should return the list of subscriptio
 
 test('Given user with subscriptions, should return list of messages of all subscriptions', () => {
     //given
-    const user0 = new User();
-    const user1 = new User();
-    const user2 = new User();
-    const message0: string = 'Hi, this is user 0';
-    const message1: string = 'Hi, this is user 1';
-    const message2: string = 'Nice to meet you user 0';
+    const user0 = new User("Alice");
+    const user1 = new User("Bob");
+    const user2 = new User("Charlie");
+    const message0: Message = new Message('Hi, this is user 0');
+    const message1: Message = new Message('Hi, this is user 1');
+    const message2: Message = new Message('Nice to meet you user 0');
 
     user0.publishMessage(message0);
     user1.publishMessage(message1);
@@ -84,10 +85,10 @@ test('Given user with subscriptions, should return list of messages of all subsc
 
     user2.subscribeToUserTimeline(user0);
     user2.subscribeToUserTimeline(user1);
-    const expectedListOfMessages: string[] = [message0, message1, message2];
+    const expectedListOfMessages: Message[] = [message0, message1, message2];
 
     //when
-    const actualListOfMessages: string[] = user2.getSubscriptionsMessages();
+    const actualListOfMessages: Message[] = user2.getSubscriptionsMessages();
 
     //then
     expect(actualListOfMessages).toStrictEqual(expectedListOfMessages);
