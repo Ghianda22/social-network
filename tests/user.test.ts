@@ -31,7 +31,7 @@ test('When messages are published, should mantain the pubblication order in time
 })
 
 // Bob can view Alice’s timeline
-test("User should be able to get another user's timeline", () => {
+test("When getUserTimeline(user) is called, should return user's timeline", () => {
     //given
     const user0: User = new User();
     const user1: User = new User();
@@ -53,18 +53,19 @@ test("User should be able to get another user's timeline", () => {
 })
 
 //Charlie can subscribe to Alice’s and Bob’s timelines, and view an aggregated list of all subscriptions
-test('whenUserSubscribeToMultipleUsers_thenAListOfSubscriptionShouldBeShown', ()=>{
+test('When getSubscriptionsList is called, should return the list of subscriptions', ()=>{
     //given
     const user0 = new User();
     const user1 = new User();
     const user2 = new User();
-
-    //when
     user2.subscribeToUserTimeline(user0);
     user2.subscribeToUserTimeline(user1);
     const expectedListOfSubscriptions: User[] = [user0, user1];
+
+    //when
     const actualListOfSubscriptions: User[] = user2.getSubscriptionsList();
 
     //then
     expect(actualListOfSubscriptions).toStrictEqual(expectedListOfSubscriptions);
 })
+
