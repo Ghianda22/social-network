@@ -4,7 +4,7 @@ export default class User{
     #_timeline: Message[] = [];
     #_subscriptions: User[] = [];
     #_username: string;
-    static existingUsernames: string[] = [];
+    static existingUsernames: string[] = []; //should be a set
 
 
     constructor(username: string) {
