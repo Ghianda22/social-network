@@ -1,9 +1,12 @@
 import Message from "./Message";
+import PrivateMessage from "./PrivateMessage";
 
-export default class User{
+export default class User {
     #_timeline: Message[] = [];
     #_subscriptions: User[] = [];
     #_username: string;
+    #_privateMessage: Map<string, PrivateMessage[]> = new Map();
+
     static existingUsernames: string[] = []; //should be a set
 
 
@@ -12,6 +15,7 @@ export default class User{
         User.existingUsernames.push(username);
     }
 
+
     get timeline(): Message[] {
         return this.#_timeline;
     }
@@ -19,6 +23,7 @@ export default class User{
     set timeline(value: Message[]) {
         this.#_timeline = value;
     }
+
     get subscriptions(): User[] {
         return this.#_subscriptions;
     }
@@ -27,7 +32,23 @@ export default class User{
         this.#_subscriptions = value;
     }
 
-    publishMessage(message: Message):void  {
+    get username(): string {
+        return this.#_username;
+    }
+
+    set username(value: string) {
+        this.#_username = value;
+    }
+
+    get privateMessage(): Map<string, PrivateMessage[]> {
+        return this.#_privateMessage;
+    }
+
+    set privateMessage(value: Map<string, PrivateMessage[]>) {
+        this.#_privateMessage = value;
+    }
+
+    publishMessage(message: Message): void {
         this.timeline.push(message);
     }
 
@@ -51,4 +72,24 @@ export default class User{
         })
         return allSubscriptionMessages;
     }
+
+    sendPrivateMessage(receiver: User, messageText: string) {
+        const messageToSend: PrivateMessage = new PrivateMessage(messageText, this.username, receiver.username);
+        receiver.receivePrivateMessage(this, messageToSend);
+    }
+
+    receivePrivateMessage(sender: User, message: PrivateMessage) {
+        if (this.privateMessage.has(sender.username)) {
+            this.privateMessage
+                .get(sender.username)
+                .push(message);
+        } else {
+            this.privateMessage.set(sender.username, [message]);
+        }
+    }
+
+    readPrivateMessagesWith(username: string): PrivateMessage[] {
+        return this.privateMessage.get(username);
+    }
+
 }

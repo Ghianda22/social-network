@@ -1,5 +1,6 @@
 import User from "../src/User";
 import Message from "../src/Message";
+import PrivateMessage from "../src/PrivateMessage";
 
 // Alice can publish messages to a personal timeline
 test('When a message is published, should be added to timeline', () => {
@@ -94,3 +95,24 @@ test('Given user with subscriptions, should return list of messages of all subsc
     expect(actualListOfMessages).toStrictEqual(expectedListOfMessages);
 })
 
+//Mallory can send a private message to Alice
+test('When a user send a private message, the receiver should read it', () => {
+    //given
+    const user0: User = new User('Mallory');
+    const user1: User = new User('Alice');
+    const messageText: string = "Hi Alice!";
+    const expectedMessage: PrivateMessage = new PrivateMessage(messageText, user0.username, user1.username);
+    const expectedPrivateMessage: PrivateMessage[] = [expectedMessage];
+
+    //when
+    user0.sendPrivateMessage(user1, messageText);
+    const actualPrivateMessage: PrivateMessage[] = user1.readPrivateMessagesWith(user0.username);
+
+    //then
+    expect(actualPrivateMessage).toStrictEqual(expectedPrivateMessage);
+})
+
+/**
+ * private messages should not appear in timeline
+ * private messages should be accessed only by receiver
+ * */
